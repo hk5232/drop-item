@@ -6,8 +6,8 @@ class CreateItems < ActiveRecord::Migration[6.0]
       t.string :name, null: false
       t.string :color, null: false
       t.text :feature
-      add_column :studios, :latitude, :float
-      add_column :studios, :longitude, :float
+      t.float :latitude, null: false
+      t.float :studios, null: false
       t.timestamps
     end
   end
