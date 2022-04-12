@@ -1,0 +1,20 @@
+<nav class="navbar navbar-expand-lg bg-secondary text-uppercase fixed-top" id="mainNav">
+            <div class="container">
+                <a><%= link_to 'Drop Item', root_path, class: "navbar-brand" %></a>
+                <button class="navbar-toggler text-uppercase font-weight-bold bg-primary text-white rounded" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                    Menu
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarResponsive">
+                    <ul class="navbar-nav ms-auto">
+                    <% if user_signed_in? %>
+                        <li class="nav-item mx-0 mx-lg-1"><%= link_to current_user.nickname, "#", class: "nav-link py-3 px-0 px-lg-3 rounded" %></li> 
+                        <li class="nav-item mx-0 mx-lg-1"><%= link_to 'ログアウト', destroy_user_session_path, method: :delete, class: "nav-link py-3 px-0 px-lg-3 rounded" %></li> 
+                     <% else %>
+                        <li class="nav-item mx-0 mx-lg-1"><%= link_to 'ログイン', new_user_session_path, class: "nav-link py-3 px-0 px-lg-3 rounded" %></li>
+                        <li class="nav-item mx-0 mx-lg-1"><%= link_to '新規登録', new_user_registration_path, class: "nav-link py-3 px-0 px-lg-3 rounded" %></li>
+                    <% end %>
+                    </ul>
+                </div>
+            </div>
+        </nav>

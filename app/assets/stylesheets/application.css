@@ -13,5 +13,7 @@
  *= require_self
  *= require index.css
   *= require btn.scss
+ *= require registration.scss
+  *= require new.scss
 
  */
