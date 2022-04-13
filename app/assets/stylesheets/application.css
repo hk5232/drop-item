@@ -15,5 +15,7 @@
   *= require btn.scss
  *= require registration.scss
   *= require new.scss
+  *= require map.scss
+    *= require show.scss
 
  */
