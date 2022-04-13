@@ -3,7 +3,7 @@ class ItemsController < ApplicationController
   before_action :item_set, only: [:show, :edit, :update, :destroy]
 
   def index
-    @items = Item.all.order('created_at DESC')
+    @items = Item.all.order('created_at DESC').limit(8)
   end
 
   def new
