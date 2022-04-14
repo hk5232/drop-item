@@ -19,7 +19,7 @@
     <div class="item-img-content">
       <%= image_tag @item.image ,class:"item-box-img" %>
       
-      <% if @item.present? %>
+      <% if @item.find.present? %>
       <div class="sold-out">
         <span>Sold Out!!</span>
       </div>
@@ -31,6 +31,17 @@
         <h2><%= @item.address %></h2>
       </span>
     </div>
+
+  <% unless @item.find.present? %>
+    <% if user_signed_in? && current_user == @item.user %>
+      <%= link_to "商品の編集", edit_item_path, method: :get, class: "item-red-btn" %>
+        <p class="or-text">or</p>
+      <%= link_to "削除", item_path, method: :delete, class:"item-destroy" %>
+    <% elsif user_signed_in? %>
+    <%= link_to "購入画面に進む", item_buys_path(@item), class:"item-red-btn"%>
+    <% end %>
+
+  <% end %>
 
     <table class="detail-table">
       <tbody>
