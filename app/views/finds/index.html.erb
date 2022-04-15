@@ -1,0 +1,61 @@
+<%= render "shared/header" %>
+
+<section class="page-section portfolio" id="portfolio">
+            <div class="container">
+                <!-- Portfolio Section Heading-->
+                <h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">落とし物情報</h2>
+                <!-- Icon Divider-->
+                <div class="divider-custom" >
+                    <div class="divider-custom-line"></div>
+                    <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+                    <div class="divider-custom-line"></div>
+                </div>
+              </div>
+<div class="item-show">
+  <div class="item-box">
+    <h1 class="name">
+      <%= @item.name %>
+    </h1>
+    <div class="item-img-content">
+      <%= image_tag @item.image ,class:"item-box-img" %>
+    </div>
+    <div class="item-price-box">
+      <span class="item-postage">
+        <h2><%= @item.address %></h2>
+      </span>
+    </div>
+    <div class="item-fotm">
+    <%= form_with(model: [@item, @find], multipart: true, local: true) do |f| %>
+  
+    <%= render 'shared/error_messages', model: f.object %>
+    <div class="new-items" >
+      <div class="weight-bold-text text-center" >
+        <%= "教えてくれた#{@item.user.nickname}さんに感謝の言葉を伝えよう" %>
+        <span class="indispensable">必須</span>
+      </div>
+      <%= f.text_area :comment, class:"items-text", id:"item-name", placeholder:"例） 祖母からもらった大切なものでした！ありがとうございます！" %>
+          <div class="sell-btn-contents">
+      <%= f.submit "伝える" ,class:"sell-btn" %>
+      <%=link_to 'もどる', root_path, class:"back-btn" %>
+    </div>
+    </div>
+    </div>
+  <% end %>
+
+
+
+<footer class="footer text-center" style='width:100% !important; height:200px !important; margin-top :20px;' >
+            <div class="container">
+                <div class="row">
+                    
+                <div class="col-lg-12 mb-5 mb-lg-0">
+                   <h1 class="text-uppercase mb-4">Drop Item&emsp;
+                 
+                      <%= link_to image_tag("app-store.svg", class:"apple-btn"), "#" %>
+                       <%= link_to image_tag("google-play.png", class:"google-btn"), "#" %>
+                   </h1>
+                </div>
+                    
+                </div>
+            </div>
+        </footer>
