@@ -35,7 +35,10 @@
 
 
 <script>
- let map
+ let map;
+ let marker = [];
+ let infoWindow = [];
+ 
 
     function initMap(){
       geocoder = new google.maps.Geocoder()
@@ -45,50 +48,84 @@
           zoom: 16,
       });
       
-   //    google.maps.event.addListener(map, 'idle', function(){
-   // 表示範囲を取得
-   // let pos = map.getBounds()
-   // let north = pos.getNorthEast().lat()
-   // let south = pos.getSouthWest().lat()
-   // let east    = pos.getNorthEast().lng()
-   // let west = pos.getSouthWest().lng()
-    // コントローラーに値をGETパラメータで渡す
-   // jQuery.getScript("/items/search?&north=#{north}&south=#{south}&east=#{east}&west=#{west}")
-
-
-    //  });
+          <% @items.each do |map| %>
+    // google.maps.LatLngインスタンスを生成
+    pos = new google.maps.LatLng(
+    <%=map.latitude%>, //latitude
+    <%=map.studios%> //longitude
+    );
+    default_marker = new google.maps.Marker({
+    map: map,
+    position: pos,
     
-      <% @items.each do |m| %>
-          (function(){
-          var contentString = "住所：<%= m.address %>"; 
-
-          var marker = new google.maps.Marker({
-              position:{lat: <%= m.latitude %>, lng: <%= m.studios %>},
-              map: map,
-              title: contentString
-          });
-
-          var myInfoWindow = new google.maps.InfoWindow({
+    });
+     var myInfoWindow = new google.maps.InfoWindow({
     // 吹き出しに出す文
-    content: '<%= link_to m.name, item_path(m.id), method: :get, class: "btn" %>'
+    content: '<%= link_to map.name, item_path(map.id), method: :get, class: "btn" %>'
   });
   // 吹き出しを開く
-  myInfoWindow.open(map,marker);
+  myInfoWindow.open(map,default_marker);
   // 吹き出しが閉じられたら、マーカークリックで再び開くようにしておく
   google.maps.event.addListener(myInfoWindow, "closeclick", function() {
     google.maps.event.addListenerOnce(marker, "click", function(event) {
       myInfoWindow.open(map, marker);
     });
-  }); 
   });
-<% end %>
-         
+    <% end %>
       
       }
 
 
+ function codeAddress(){
+  // 入力を取得
+  let inputAddress = document.getElementById('address').value;
+
+  // geocodingしたあとmapを移動
+  geocoder.geocode( { 'address': inputAddress}, function(results, status) {
+    if (status == 'OK') {
+      uluru = results[0].geometry.location;
+// map.setCenterで地図が移動
+
+map = new google.maps.Map(document.getElementById("map"), {
+       center:results[0].geometry.location,
+                zoom: 16
+      });
+           <% @items.each do |map| %>
+    // google.maps.LatLngインスタンスを生成
+    pos = new google.maps.LatLng(
+    <%=map.latitude%>, //latitude
+    <%=map.studios%> //longitude
+    );
+    default_marker = new google.maps.Marker({
+    map: map,
+    position: pos,
+    
+    });
+     var myInfoWindow = new google.maps.InfoWindow({
+    // 吹き出しに出す文
+    content: '<%= link_to map.name, item_path(map.id), method: :get, class: "btn" %>'
+  });
+  // 吹き出しを開く
+  myInfoWindow.open(map,default_marker);
+  // 吹き出しが閉じられたら、マーカークリックで再び開くようにしておく
+  google.maps.event.addListener(myInfoWindow, "closeclick", function() {
+    google.maps.event.addListenerOnce(marker, "click", function(event) {
+      myInfoWindow.open(map, marker);
+    });
+  });
+    <% end %>
+
+    } else {
+      alert('Geocode was not successful for the following reason: ' + status);
+    }
+
+
+  });
+}
+
+
     </script>
-  </head>
+
   <body>
    
     <!-- Async script executes immediately and must be after any DOM elements used in callback. -->
