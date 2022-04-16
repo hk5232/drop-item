@@ -23,7 +23,7 @@ class ItemsController < ApplicationController
   end
 
   def edit
-    if @item.buy.present?
+    if @item.find.present?
       redirect_to action: :index
       return
     end
@@ -47,6 +47,18 @@ class ItemsController < ApplicationController
     if current_user == @item.user
       @item.destroy
       redirect_to root_path
+    end
+  end
+
+  def search
+    @items = Item.all
+    if params[:location].present?
+    results = Geocoder.search(params[:location])
+        # 北から南、東から西の範囲をつくる
+        lat = Range.new(*[params["north"], params["south"]].sort{|a,b|a.to_i <=> b.to_i})
+        lon = Range.new(*[params["east"], params["west"]].sort{|a,b|a.to_i <=> b.to_i})
+        # データ取得
+        @items = Item.near(results.first.coordinates, 20).page(params[:page]).per(10)
     end
   end
 
