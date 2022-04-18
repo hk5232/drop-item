@@ -17,5 +17,6 @@
   *= require new.scss
   *= require map.scss
     *= require show.scss
+      *= require search.scss
 
  */

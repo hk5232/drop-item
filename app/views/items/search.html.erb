@@ -16,8 +16,8 @@
               </div>
 
 
-
- <h2>拾った場所</h2>
+<div class="search">
+ <h2>落とした場所を検索してください</h2>
 
 <input id="address" type="textbox" name="location" value="新宿駅">
 <input type="button" value="検索" onclick="codeAddress()">
@@ -28,26 +28,31 @@
 #map {
   height: 600px;
   width: 600px;
-  margin-top : 20px;
-  margin-bottom: 20px;
+  margin : auto;
+  margin-top :20px;
 }
 </style>
 
 
 <script>
- let map;
- let marker = [];
  let infoWindow = [];
- 
+ let map
+let geocoder
 
-    function initMap(){
-      geocoder = new google.maps.Geocoder()
+      // 地図初期表示
+      function initMap() {
+        geocoder = new google.maps.Geocoder()
+        var target = document.getElementById('map');
 
-      map = new google.maps.Map(document.getElementById('map'), {
-          center: {lat: 35.6809591, lng: 139.7673068 },
+        // 地図の中心設定
+        var centerp = {lat: 35.6809591, lng: 139.7673068 },
+
+        // Google Mapの表示
+        map = new google.maps.Map(target, {
+          center: centerp,
           zoom: 16,
-      });
-      
+        });
+     
           <% @items.each do |map| %>
     // google.maps.LatLngインスタンスを生成
     pos = new google.maps.LatLng(
@@ -61,7 +66,8 @@
     });
      var myInfoWindow = new google.maps.InfoWindow({
     // 吹き出しに出す文
-    content: '<%= link_to map.name, item_path(map.id), method: :get, class: "btn" %>'
+    content: '<%= link_to map.name, item_path(map.id), method: :get, class: "btn" %>',
+    disableAutoPan: true
   });
   // 吹き出しを開く
   myInfoWindow.open(map,default_marker);
@@ -72,11 +78,11 @@
     });
   });
     <% end %>
-      
+
+
       }
 
-
- function codeAddress(){
+   function codeAddress(){
   // 入力を取得
   let inputAddress = document.getElementById('address').value;
 
@@ -90,7 +96,7 @@ map = new google.maps.Map(document.getElementById("map"), {
        center:results[0].geometry.location,
                 zoom: 16
       });
-           <% @items.each do |map| %>
+<% @items.each do |map| %>
     // google.maps.LatLngインスタンスを生成
     pos = new google.maps.LatLng(
     <%=map.latitude%>, //latitude
@@ -103,7 +109,8 @@ map = new google.maps.Map(document.getElementById("map"), {
     });
      var myInfoWindow = new google.maps.InfoWindow({
     // 吹き出しに出す文
-    content: '<%= link_to map.name, item_path(map.id), method: :get, class: "btn" %>'
+    content: '<%= link_to map.name, item_path(map.id), method: :get, class: "btn" %>',
+    disableAutoPan: true
   });
   // 吹き出しを開く
   myInfoWindow.open(map,default_marker);
@@ -123,6 +130,9 @@ map = new google.maps.Map(document.getElementById("map"), {
   });
 }
 
+
+
+     
 
     </script>
 

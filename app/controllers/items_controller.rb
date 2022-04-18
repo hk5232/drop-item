@@ -52,6 +52,7 @@ class ItemsController < ApplicationController
 
   def search
     @items = Item.all
+    gon.items = @items
     if params[:location].present?
     results = Geocoder.search(params[:location])
         # 北から南、東から西の範囲をつくる
