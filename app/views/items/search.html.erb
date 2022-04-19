@@ -57,6 +57,8 @@ let geocoder
         });
      
           <% @items.each do |map| %>
+              if (<%=map.latitude%> == "nil") { return true; }
+              else{
     // google.maps.LatLngインスタンスを生成
     pos = new google.maps.LatLng(
     <%=map.latitude%>, //latitude
@@ -80,6 +82,7 @@ let geocoder
       myInfoWindow.open(map, default_marker);
     });
   });
+              }
     <% end %>
 
 google.maps.event.addListener(map, 'idle',function() {
@@ -132,7 +135,8 @@ map = new google.maps.Map(document.getElementById("map"), {
                 zoom: 16
       });
 <% @items.each do |map| %>
-
+                 if (<%=map.latitude%> == "nil") { return true; }
+              else{
     // google.maps.LatLngインスタンスを生成
     pos = new google.maps.LatLng(
     <%=map.latitude%>, //latitude
@@ -156,8 +160,8 @@ map = new google.maps.Map(document.getElementById("map"), {
       myInfoWindow.open(map, default_marker);
     });
   });
-    <% end %>
-
+              }
+ <% end %>
     } else {
       alert('Geocode was not successful for the following reason: ' + status);
     }
