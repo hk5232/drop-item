@@ -4,7 +4,7 @@
   </header>
   <%= render "shared/header" %>
   <div class="items-sell-main">
-    <h2 class="items-sell-title map1">落とし物の情報を入力</h2>
+    <h2 class="items-sell-title">落とし物の情報を入力</h2>
     <%= form_with(model: @item, multipart: true, local: true) do |f| %>
 
     <%= render 'shared/error_messages', model: f.object %>
@@ -68,7 +68,7 @@
     </div>
     <%# /落とし物名と説明 %>
 
- <h2 class="map1 text-center">見つけた場所</h2>
+ <h2>拾った場所</h2>
 
 <input id="address" type="textbox" value="新宿駅">
 <input type="button" value="検索" onclick="codeAddress()">

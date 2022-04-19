@@ -15,13 +15,14 @@
                 </div>
               </div>
 
-
+<div class="main">
+<div class="left-main">
 <div class="search">
  <h2>落とした場所を検索してください</h2>
 
 <input id="address" type="textbox" name="location" value="新宿駅">
 <input type="button" value="検索" onclick="codeAddress()">
-
+</div>
 <div id='map'></div>
 
 <style>
@@ -38,6 +39,8 @@
  let infoWindow = [];
  let map
 let geocoder
+ let items = gon.items; 
+ var markerData = items.length;
 
       // 地図初期表示
       function initMap() {
@@ -66,19 +69,51 @@ let geocoder
     });
      var myInfoWindow = new google.maps.InfoWindow({
     // 吹き出しに出す文
-    content: '<%= link_to map.name, item_path(map.id), method: :get, class: "btn" %>',
+    content: '<%= link_to raw("#{map.name}<br/>詳細ページへ"), item_path(map.id), method: :get, class: "btn" %>',
     disableAutoPan: true
   });
   // 吹き出しを開く
   myInfoWindow.open(map,default_marker);
   // 吹き出しが閉じられたら、マーカークリックで再び開くようにしておく
   google.maps.event.addListener(myInfoWindow, "closeclick", function() {
-    google.maps.event.addListenerOnce(marker, "click", function(event) {
-      myInfoWindow.open(map, marker);
+    google.maps.event.addListenerOnce(default_marker, "click", function(event) {
+      myInfoWindow.open(map, default_marker);
     });
   });
     <% end %>
 
+google.maps.event.addListener(map, 'idle',function() {
+            var mapMarkerData = [];
+
+        //地図の範囲内を取得
+        var bounds = map.getBounds();
+        mapNE_lat = bounds.getNorthEast().lat();
+        mapSW_lat = bounds.getSouthWest().lat();
+        mapNE_lng = bounds.getNorthEast().lng();
+        mapSW_lng = bounds.getSouthWest().lng();
+
+         console.log(mapNE_lat);
+         console.log(mapSW_lat);
+        console.log(mapNE_lng);
+         console.log(mapSW_lng);
+
+        // 緯度経度をもってリストを作成
+        var j = 0;
+        for (var i = 0; i < items.length; i++) {
+          if (mapNE_lat >= items[i]['latitude'] && items[i]['latitude'] >= mapSW_lat) {
+            if (mapNE_lng >= items[i]['studios'] && items[i]['studios'] >= mapSW_lng) { 
+              mapMarkerData[j] = items[i];
+              j++;
+            }
+          }
+        }
+        
+
+
+
+
+        
+});
 
       }
 
@@ -97,6 +132,7 @@ map = new google.maps.Map(document.getElementById("map"), {
                 zoom: 16
       });
 <% @items.each do |map| %>
+
     // google.maps.LatLngインスタンスを生成
     pos = new google.maps.LatLng(
     <%=map.latitude%>, //latitude
@@ -109,15 +145,15 @@ map = new google.maps.Map(document.getElementById("map"), {
     });
      var myInfoWindow = new google.maps.InfoWindow({
     // 吹き出しに出す文
-    content: '<%= link_to map.name, item_path(map.id), method: :get, class: "btn" %>',
+    content: '<%= link_to raw("#{map.name}<br/>詳細ページへ"), item_path(map.id), method: :get, class: "btn" %>',
     disableAutoPan: true
   });
   // 吹き出しを開く
   myInfoWindow.open(map,default_marker);
   // 吹き出しが閉じられたら、マーカークリックで再び開くようにしておく
   google.maps.event.addListener(myInfoWindow, "closeclick", function() {
-    google.maps.event.addListenerOnce(marker, "click", function(event) {
-      myInfoWindow.open(map, marker);
+    google.maps.event.addListenerOnce(default_marker, "click", function(event) {
+      myInfoWindow.open(map, default_marker);
     });
   });
     <% end %>
@@ -135,15 +171,20 @@ map = new google.maps.Map(document.getElementById("map"), {
      
 
     </script>
-
-  <body>
    
     <!-- Async script executes immediately and must be after any DOM elements used in callback. -->
     <script
       src="https://maps.googleapis.com/maps/api/js?key=<%=ENV['GOOGLE_MAPS_API_KEY']%>&callback=initMap&libraries=&v=weekly"
       async
     ></script>
+</div>
+</div>
+<div class="right-main">
+    <ul>
+     <li>
+     </ul>
 
+</div>
 <footer class="footer text-center" style='width:100% !important; height:200px !important; margin-top :20px;' >
             <div class="container">
                 <div class="row">
