@@ -37,19 +37,24 @@
         <% if @items.blank? %>
       <div class="col mb-5">
         <%= link_to '#' do %>
-        <div class="card h-100">
+        <div class='item-img-content card h-100'>
         <%= image_tag "https://tech-master.s3.amazonaws.com/uploads/curriculums/images/Rails1-4/sample.jpg", class: "item-img" %>
                <div class="text-center">
-               <!-- Product name-->
-              <h5 class="fw-bolder">落とし物情報サンプル</h5>
-          
-            <span>落とし物名称</span>
-              <span class='star-count'>見つけた場所</span>
-            </div>
+          <h5 class='fw-bolder mt-3'>
+            落とし物名称サンプル</h5>
+           <h5 class='fw-boldere'>
+            見つけた場所
+                                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent mt-3">
+          <%= link_to "詳細を見に行く", "#", class: "btn btn-outline-dark mt-auto" %>
+
+                            </div>
           </div>
+        </div>
+             
+       
 
         <% end %>
-
+   </div>
 
       <% end %>
         <% @items.each do |item| %>
@@ -67,11 +72,11 @@
         
         
        <div class="text-center">
-          <h5 class='fw-bolder'>
+          <h5 class='fw-bolder mt-3'>
             <%= item.name %></h5>
            <h5 class='fw-boldere'>
             <%= item.address %>
-                                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent mt-2">
+                                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent mt-3">
           <%= link_to "詳細を見に行く", item_path(item.id), class: "btn btn-outline-dark mt-auto" %>
 
                             </div>
@@ -104,11 +109,11 @@
         
         
        <div class="text-center item-info">
-          <h5 class='fw-bolder'>
+          <h5 class='fw-bolder mt-3'>
             <%= item.name %></h5>
            <h5 class='fw-boldere'>
             <%= item.address %>
-                                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent mt-2">
+                                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent mt-3">
         <%= link_to "コメントを見に行く", item_path(item.id), class: "btn btn-outline-dark mt-auto" %>
 
                             </div>
