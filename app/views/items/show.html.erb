@@ -133,3 +133,7 @@ let marker
                 </div>
             </div>
         </footer>
+   <%= link_to "https://twitter.com/share?url=https://drop-item.herokuapp.com/items/#{@item.id}&text=#{@item.address}で落とし物を見つけました！落とし物共有サイトならDropItem&hashtags=DropItem", title: 'Twitter', target: '_blank', class: 'add_style purchase-btn' do %>
+  <span class='purchase-btn-text'>つぶやく</span>
+  <%= image_tag 'twitter.jpg', size: '200x50' ,class: "purchase-btn-icon" %>
+  <% end %>
