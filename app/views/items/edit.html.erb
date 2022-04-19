@@ -1,0 +1,198 @@
+<div class="items-sell-contents">
+  <header class="items-sell-header">
+
+  </header>
+  <%= render "shared/header" %>
+  <div class="items-sell-main">
+    <h2 class="items-sell-title">落とし物の情報を入力</h2>
+    <%= form_with(model: @item, multipart: true, local: true) do |f| %>
+
+    <%= render 'shared/error_messages', model: f.object %>
+
+    <%# 落とし物画像 %>
+    <div class="img-upload">
+      <div class="weight-bold-text">
+        落とし物の画像
+        <span class="indispensable">必須</span>
+      </div>
+      <div class="click-upload">
+        <p>
+          クリックしてファイルをアップロード
+        </p>
+        <%= f.file_field :image, id:"item-image" %>
+      </div>
+    </div>
+    <%# /落とし物画像 %>
+    <%# 落とし物名と説明 %>
+    <div class="new-items">
+      <div class="weight-bold-text">
+        落とし物の名前
+        <span class="indispensable">必須</span>
+      </div>
+      <%= f.text_area :name, class:"items-text", id:"item-name", placeholder:"落とし物名（必須 20文字まで) 例）定期入れ", maxlength:"20" %>
+      <div class="items-explain">
+        <div class="weight-bold-text">
+          見つけた場所
+          <span class="indispensable">必須</span>
+        </div>
+        <%= f.text_area :address, class:"items-text", id:"item-address", placeholder:"見つけた場所 例）新宿駅の小田急線改札内で見つけました。",rows:"7" ,maxlength:"1000" %>
+      </div>
+      <div class="items-explain">
+        <div class="weight-bold-text">
+          落とし物の説明
+          <span class="indispensable">任意</span>
+        </div>
+        <%= f.text_area :explanation, class:"items-text", id:"item-info", placeholder:"落とし物の説明（必須 1,000文字まで）例）Yamadaさんと書いてありました。" ,rows:"7" ,maxlength:"1000" %>
+      </div>
+      <div class="items-explain">
+        <div class="weight-bold-text">
+          色
+          <span class="indispensable">任意</span>
+        </div>
+        <%= f.text_field :color, class:"items-text", id:"item-info", placeholder:"例） 赤色の定期入れ" ,rows:"1" ,maxlength:"1000" %>
+      </div>
+      <div class="items-explain">
+        <div class="weight-bold-text">
+          緯度(google mapのピンの位置から自動的に入力されます）
+          <span class="indispensable">必須</span>
+        </div>
+        <%= f.text_area :latitude, class:"items-text", id:"lat", placeholder:"google mapのピンの位置から自動的に入力されます" ,rows:"1" ,maxlength:"1000" %>
+      </div>
+      <div class="items-explain">
+        <div class="weight-bold-text">
+          経度(google mapのピンの位置から自動的に入力されます）
+          <span class="indispensable">必須</span>
+        </div>
+        <%= f.text_area :studios, class:"items-text", id:"lng", placeholder:"google mapのピンの位置から自動的に入力されます" ,rows:"1" ,maxlength:"1000" %>
+      </div>
+    </div>
+    <%# /落とし物名と説明 %>
+
+ <h2>拾った場所</h2>
+
+<input id="address" type="textbox" value="新宿駅">
+<input type="button" value="検索" onclick="codeAddress()">
+
+<div id='map'></div>
+
+<style>
+#map {
+  height: 600px;
+  width: 600px;
+  margin-top : 20px;
+  margin-bottom: 20px;
+}
+</style>
+
+
+<script>
+// 下の1行を追加 
+let map
+let geocoder
+let uluru
+let marker
+let lat = document.getElementById('lat')
+let lng = document.getElementById('lng')
+
+
+      // Initialize and add the map
+      function initMap() {
+         geocoder = new google.maps.Geocoder();
+        // The location of Uluru
+         uluru = { lat: 35.6809591, lng: 139.7673068 };
+        // The map, centered at Uluru
+         map = new google.maps.Map(document.getElementById("map"), {
+          zoom: 16,
+          center: uluru,
+        });
+        // The marker, positioned at Uluru
+         marker = new google.maps.Marker({
+          position: uluru,
+          map: map,
+          draggable: true
+        });
+        
+    // マーカーのドロップ（ドラッグ終了）時のイベント
+    google.maps.event.addListener( marker, 'dragend', function(ev){
+      // イベントの引数evの、プロパティ.latLngが緯度経度。<br />
+      lat.value = ev.latLng.lat();
+      lng.value = ev.latLng.lng();
+    });
+  }
+ 
+ function codeAddress(){
+  // 入力を取得
+  let inputAddress = document.getElementById('address').value;
+
+  // geocodingしたあとmapを移動
+  geocoder.geocode( { 'address': inputAddress}, function(results, status) {
+    if (status == 'OK') {
+      uluru = results[0].geometry.location;
+      
+// map.setCenterで地図が移動
+map = new google.maps.Map(document.getElementById("map"), {
+       center:results[0].geometry.location,
+                zoom: 16
+      });
+              if(marker != null){
+        marker.setMap(null);
+        }
+        marker = null;
+
+// google.maps.MarkerでGoogleMap上の指定位置にマーカが立つ
+      var marker = new google.maps.Marker({
+          map: map,
+          position: results[0].geometry.location,
+          draggable: true,
+      });
+      document.getElementById('lat').value = uluru.lat();
+        document.getElementById('lng').value = uluru.lng();
+    } else {
+      alert('Geocode was not successful for the following reason: ' + status);
+    }
+
+
+    google.maps.event.addListener( marker, 'dragend', function(ev){
+      // イベントの引数evの、プロパティ.latLngが緯度経度。<br />
+      lat.value = ev.latLng.lat();
+      lng.value = ev.latLng.lng();
+    });
+  });
+}
+
+    </script>
+  </head>
+  <body>
+   
+    <!-- Async script executes immediately and must be after any DOM elements used in callback. -->
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=<%=ENV['GOOGLE_MAPS_API_KEY']%>&callback=initMap&libraries=&v=weekly"
+      async
+    ></script>
+
+   <!-- <%=ENV['GOOGLE_MAPS_API_KEY']%> -->
+    <%# 下部ボタン %>
+    <div class="sell-btn-contents">
+      <%= f.submit "登録する" ,class:"sell-btn" %>
+      <%=link_to 'もどる', root_path, class:"back-btn" %>
+    </div>
+    <%# /下部ボタン %>
+  </div>
+  <% end %>
+
+<footer class="footer text-center" style='width:100% !important; height:200px !important; margin-top :20px;' >
+            <div class="container">
+                <div class="row">
+                    
+                <div class="col-lg-12 mb-5 mb-lg-0">
+                   <h1 class="text-uppercase mb-4">Drop Item&emsp;
+                 
+                      <%= link_to image_tag("app-store.svg", class:"apple-btn"), "#" %>
+                       <%= link_to image_tag("google-play.png", class:"google-btn"), "#" %>
+                   </h1>
+                </div>
+                    
+                </div>
+            </div>
+        </footer>
+</div>

@@ -20,6 +20,7 @@ class ItemsController < ApplicationController
   end
 
   def show
+    @item = Item.includes(:user).includes(:find).find(params[:id])
   end
 
   def edit
@@ -62,6 +63,7 @@ class ItemsController < ApplicationController
         @items = Item.near(results.first.coordinates, 20).page(params[:page]).per(10)
     end
   end
+
 
   private
 

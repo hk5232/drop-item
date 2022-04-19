@@ -40,9 +40,10 @@
     <% elsif user_signed_in? %>
     <%= link_to "拾った！", item_finds_path(@item), class:"item-red-btn"%>
     <% end %>
-
   <% end %>
-
+  <% if @item.find.present? %>
+      <%= link_to @item.find.comment, item_finds_path(@item.user), class:"item-red-btn"%>
+    <% end %>
     <table class="detail-table">
       <tbody>
         <tr>

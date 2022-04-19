@@ -33,7 +33,7 @@
         <%= "教えてくれた#{@item.user.nickname}さんに感謝の言葉を伝えよう" %>
         <span class="indispensable">必須</span>
       </div>
-      <%= f.text_area :comment, class:"items-text", id:"item-name", placeholder:"例） 祖母からもらった大切なものでした！ありがとうございます！" %>
+      <%= f.text_area :comment, class:"items-text", id:"item-name", placeholder:"例） 祖母からもらった大切なペンダントでした！ありがとうございます！" %>
           <div class="sell-btn-contents">
       <%= f.submit "伝える" ,class:"sell-btn" %>
       <%=link_to 'もどる', root_path, class:"back-btn" %>
