@@ -18,10 +18,13 @@ class FindsController < ApplicationController
     @find = Find.new(find_params)
     if @find.valid?
       @find.save
+      @item.update_attribute(:latitude, "nil")
+      @item.update_attribute(:studios, "nil")
       redirect_to root_path
     else
       render :index
     end
+    
   end
 
   private
