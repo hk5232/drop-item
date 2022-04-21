@@ -56,15 +56,13 @@ class ItemsController < ApplicationController
     @items = Item.all
     gon.items = @items
     @map_items = []
-    unless params[:mapMarkerData] == nil 
-    @map_items = params[:mapMarkerData]
-    partial = render_to_string(partial:'shared/list', :locals => { map_items: @map_items })
-    puts partial
-    render json:{html:partial}
+    unless params[:mapMarkerData].nil?
+      @map_items = params[:mapMarkerData]
+      partial = render_to_string(partial: 'shared/list', locals: { map_items: @map_items })
+      puts partial
+      render json: { html: partial }
     end
   end
-
-
 
   private
 

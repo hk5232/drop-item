@@ -9,29 +9,27 @@ class FindsController < ApplicationController
       return
     end
 
-    unless user_signed_in?
-      redirect_to root_path 
-    end
+    redirect_to root_path unless user_signed_in?
   end
 
   def create
     @find = Find.new(find_params)
     if @find.valid?
       @find.save
-      @item.update_attribute(:latitude, "nil")
-      @item.update_attribute(:studios, "nil")
+      @item.update_attribute(:latitude, 'nil')
+      @item.update_attribute(:studios, 'nil')
       redirect_to root_path
     else
       render :index
     end
-    
   end
 
   private
 
   def find_params
     params.require(:find).permit(:comment).merge(
-      user_id: current_user.id, item_id: params[:item_id],)
+      user_id: current_user.id, item_id: params[:item_id]
+    )
   end
 
   def item_set
