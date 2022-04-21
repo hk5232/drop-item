@@ -18,5 +18,5 @@
   *= require map.scss
     *= require show.scss
       *= require search.scss
-
+      *= require list.scss
  */
