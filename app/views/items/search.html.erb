@@ -34,13 +34,28 @@
 }
 </style>
 
+    <!-- Async script executes immediately and must be after any DOM elements used in callback. -->
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=<%=ENV['GOOGLE_MAPS_API_KEY']%>&callback=initMap&libraries=&v=weekly"
+      async
+    ></script>
+</div>
 
+<div class="right-main mt-5" id="list">
+    
+      <%= render :partial => "shared/list", locals:{data: @map_items} %>
+
+</div>
+
+
+</div>
 <script>
  let infoWindow = [];
  let map
 let geocoder
  let items = gon.items; 
  var markerData = items.length;
+ var mapMarkerData = [];
 
       // 地図初期表示
       function initMap() {
@@ -84,7 +99,7 @@ let geocoder
   });
               }
     <% end %>
-
+const list = document.getElementById("list");
 google.maps.event.addListener(map, 'idle',function() {
             var mapMarkerData = [];
 
@@ -95,28 +110,61 @@ google.maps.event.addListener(map, 'idle',function() {
         mapNE_lng = bounds.getNorthEast().lng();
         mapSW_lng = bounds.getSouthWest().lng();
 
-         console.log(mapNE_lat);
-         console.log(mapSW_lat);
-        console.log(mapNE_lng);
-         console.log(mapSW_lng);
+        // console.log(mapNE_lat);
+        // console.log(mapSW_lat);
+        //console.log(mapNE_lng);
+        // console.log(mapSW_lng);
 
-        // 緯度経度をもってリストを作成
+
+
+
+
         var j = 0;
         for (var i = 0; i < items.length; i++) {
           if (mapNE_lat >= items[i]['latitude'] && items[i]['latitude'] >= mapSW_lat) {
             if (mapNE_lng >= items[i]['studios'] && items[i]['studios'] >= mapSW_lng) { 
               mapMarkerData[j] = items[i];
+              var name = items[i]['name']
+              var address = items[i]['address']
+              var image = items[i]['image']
               j++;
+
             }
           }
         }
-        
+        console.log(mapMarkerData)
+     $.ajax({
+       url: '/items/search',
+       type: 'GET',
+       dataType: 'json',
+       data: {
+          mapMarkerData: mapMarkerData
+         },
+         async: false, 
+        dataType: 'json',
+        success: function(result){
+      console.debug("result" + result);
+    },
+    error: function(jqxhr, status, exception) {
+      console.debug('jqxhr', jqxhr);
+      console.debug('status', status);
+      console.debug('exception', exception);
+    }
+     })
+     .done(function(data){
+       console.log(data.html)
+            $('#list').children().remove();
+            $('#list').html(data.html);
+     })
+      // Ajaxリクエストが失敗した場合
+      .fail(function(XMLHttpRequest, textStatus, errorThrown){
+        alert(errorThrown);
+      });
+      
 
-
-
-
-        
+  
 });
+
 
       }
 
@@ -130,7 +178,7 @@ google.maps.event.addListener(map, 'idle',function() {
       uluru = results[0].geometry.location;
 // map.setCenterで地図が移動
 
-map = new google.maps.Map(document.getElementById("map"), {
+map2 = new google.maps.Map(document.getElementById("map"), {
        center:results[0].geometry.location,
                 zoom: 16
       });
@@ -143,7 +191,7 @@ map = new google.maps.Map(document.getElementById("map"), {
     <%=map.studios%> //longitude
     );
     default_marker = new google.maps.Marker({
-    map: map,
+    map: map2,
     position: pos,
     
     });
@@ -164,31 +212,97 @@ map = new google.maps.Map(document.getElementById("map"), {
  <% end %>
     } else {
       alert('Geocode was not successful for the following reason: ' + status);
+    };
+
+    google.maps.event.addListener(map2, 'idle',function() {
+            var mapMarkerData = [];
+
+        //地図の範囲内を取得
+        var bounds = map2.getBounds();
+        mapNE_lat = bounds.getNorthEast().lat();
+        mapSW_lat = bounds.getSouthWest().lat();
+        mapNE_lng = bounds.getNorthEast().lng();
+        mapSW_lng = bounds.getSouthWest().lng();
+
+         console.log(mapNE_lat);
+        // console.log(mapSW_lat);
+        //console.log(mapNE_lng);
+        // console.log(mapSW_lng);
+
+
+
+
+ //             list.insertAdjacentHTML(`afterend`, `        
+  //     <div class='item-info'>
+  //        <h5 class='item-name2'>
+  //          あ</h5>
+  //       <h5 class='item-name'>
+   //       い
+  //        </h5>
+  //                <div class='item-img-content'>
+//う
+  //        </div>
+   //     </div>
+///</li>
+   //   `); 
+
+
+        var j = 0;
+        for (var i = 0; i < items.length; i++) {
+          if (mapNE_lat >= items[i]['latitude'] && items[i]['latitude'] >= mapSW_lat) {
+            if (mapNE_lng >= items[i]['studios'] && items[i]['studios'] >= mapSW_lng) { 
+              mapMarkerData[j] = items[i];
+              var name = items[i]['name']
+              var address = items[i]['address']
+              var image = items[i]['image']
+              j++;
+
+            }
+          }
+        }
+        console.log(mapMarkerData)
+     $.ajax({
+       url: '/items/search',
+       type: 'GET',
+       dataType: 'json',
+       data: {
+          mapMarkerData: mapMarkerData
+         },
+         async: false, 
+        dataType: 'json',
+        success: function(result){
+      console.debug("result" + result);
+    },
+    error: function(jqxhr, status, exception) {
+      console.debug('jqxhr', jqxhr);
+      console.debug('status', status);
+      console.debug('exception', exception);
     }
+     })
+     .done(function(data){
+       console.log(data.html)
+            $('#list').children().remove();
+            $('#list').html(data.html);
+     })
+      // Ajaxリクエストが失敗した場合
+      .fail(function(XMLHttpRequest, textStatus, errorThrown){
+        alert(errorThrown);
+      });
+      
+
+  
+});
 
 
   });
-}
+  
 
 
 
+   }
      
-
     </script>
    
-    <!-- Async script executes immediately and must be after any DOM elements used in callback. -->
-    <script
-      src="https://maps.googleapis.com/maps/api/js?key=<%=ENV['GOOGLE_MAPS_API_KEY']%>&callback=initMap&libraries=&v=weekly"
-      async
-    ></script>
-</div>
-</div>
-<div class="right-main">
-    <ul>
-     <li>
-     </ul>
-
-</div>
 <footer class="footer text-center" style='width:100% !important; height:200px !important; margin-top :20px;' >
             <div class="container">
                 <div class="row">

@@ -55,15 +55,15 @@ class ItemsController < ApplicationController
   def search
     @items = Item.all
     gon.items = @items
-    if params[:location].present?
-    results = Geocoder.search(params[:location])
-        # 北から南、東から西の範囲をつくる
-        lat = Range.new(*[params["north"], params["south"]].sort{|a,b|a.to_i <=> b.to_i})
-        lon = Range.new(*[params["east"], params["west"]].sort{|a,b|a.to_i <=> b.to_i})
-        # データ取得
-        @items = Item.near(results.first.coordinates, 20).page(params[:page]).per(10)
+    @map_items = []
+    unless params[:mapMarkerData] == nil 
+    @map_items = params[:mapMarkerData]
+    partial = render_to_string(partial:'shared/list', :locals => { map_items: @map_items })
+    puts partial
+    render json:{html:partial}
     end
   end
+
 
 
   private
