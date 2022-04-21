@@ -1,14 +1,13 @@
 <div>
     <h2>付近の落とし物情報</h2>
     <% if @map_items.present? %>
-    <p>リスト<p>
+    <p>詳細<p>
         <ul class="sample1">
         <% n = 0 %>
             <% map_items.permit!.to_hash.each do |items| %>
                 <li><%= raw("名前【#{items[1]["name"]}】<br/>
                登録された場所【#{items[1]["address"]}】") %></li>
-                <li><%= "登録された場所【#{items[1]["id"].to_i}】" %></li>
-<%#= link_to item_path(items[1]["id"].to_i.id)  %>
+           <%= link_to "詳細ページへ", item_path(items[1]["id"]) , class: "btn" %>
 
                 <% n += 1%>
 
