@@ -53,6 +53,11 @@
       <h4><%= @item.find.comment %></h4>
       </div>
           </div>
+          <% if user_signed_in? && current_user == @item.user %>
+          <div class="delete-btn">
+       <%= link_to "完了した", item_path, method: :delete, class:"d-btn"%>
+       </div>
+       <% end %>
     <% end %>
     <table class="detail-table">
       <tbody>
