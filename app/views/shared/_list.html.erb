@@ -15,12 +15,9 @@
         </ul>
     <!-- 初期では↓が表示され、ajaxで↑を表示する -->
     <% else %>
-        <p>初期値だよ。ajaxで部分更新するとユーザーの名前が取れるよ</p>
-        <p>ここにユーザーIDを３つ入れて送ってみるとな・・・</p>
+        <p>このコメントが表示される場合は再度読み込みを行なってください</p>
+        <p>読み込みエラー javascriptを確認してください</p>
         <div class="col-sm-4">
-            <%= telephone_field_tag :test,:id,value:"1",id:"id1",class:"form-control" %>
-            <%= telephone_field_tag :test,:id,value:"2",id:"id2",class:"form-control" %>
-            <%= telephone_field_tag :test,:id,value:"3",id:"id3",class:"form-control" %>
         </div>
         <a href="javascript:void(0)" type="button" id="id_submit" class="btn btn-save"><i class="material-icons">save</i>ajax!</a>
     <% end %>
